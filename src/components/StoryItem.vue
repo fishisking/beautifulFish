@@ -5,7 +5,7 @@
 		{{proContent}}
 		<a>查看全文</a>
 	</p>
-	<span>字数:{{storyData.wordNumber}} &nbsp;&nbsp;&nbsp;&nbsp;日期:{{storyData.time}}&nbsp;&nbsp;&nbsp;&nbsp; 种类:{{storyData.category}}</span>
+	<span class="subcontent">字数:{{storyData.wordNumber}} &nbsp;&nbsp;&nbsp;&nbsp;日期:{{storyData.time}}&nbsp;&nbsp;&nbsp;&nbsp; 种类:{{storyData.category}}</span>
 </div>
 </template>
 <script >
@@ -40,6 +40,10 @@
 h1{
 	
 }
-
-
+.subcontent{
+	color:#808695
+}
+p{
+	color:#515a6e
+}
 </style>

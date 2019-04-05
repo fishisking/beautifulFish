@@ -13,19 +13,20 @@
 		<Col span="4">
 			<ButtonGroup>
 		        <Button icon="ios-search" type="primary" style="margin-top: 0.5px;margin-left: -0.5px;" @click="search">搜索</Button>
-		        <Button style="margin-top: 0.5px;margin-left: -0.5px;" type="success" >设置索引</Button>
+		        <Button style="margin-top: 0.5px;margin-left: -0.5px;" type="success" @click="getRangeWordNum">设置索引</Button>
 		    </ButtonGroup>
 		</Col>
 	</Row>
 	<Row>
 		<Col span="6">
-			<Alert v-if="ifSearchSuccess" type="success" style="margin:5px;letter-spacing: 4.5px;font-weight: bold" show-icon closable>
+			<Alert v-if="ifSearchSuccess" type="success" style="margin:5px;letter-spacing: 4.5px;font-weight: bold" show-icon closable4
+			>
 				你总共搜索出{{availNum}}条信息
 			</Alert>
 
 		</Col>
 	</Row>
-	<FloatPanel v-show="ifSearchSuccess" style="float: right;margin-right: 25%">
+	<FloatPanel v-if="ifSearchSuccess" style="float: right;margin-right: 25%" :setting="settings">
 		
 	</FloatPanel>
 	<ul v-for="(story,index) in showStorys">
@@ -63,7 +64,12 @@
                 searchBy: 'title',
                 ifSearchSuccess:false,
                 storys:[],
-                page:1
+                page:1,
+                settings:{
+                	min:null,
+                	max:null,
+                	category:null
+                }
 			}
 		},
 		computed:{
@@ -84,10 +90,29 @@
 						_this.storys = res.data
 						_this.availNum = res.data.length
 						_this.ifSearchSuccess = true
+						_this.getRangeWordNum()
 					})
+				
 			},
 			changePageNumber(page){
 				this.page = page
+			},
+			getRangeWordNum(){
+				let category = ''
+				let wordNum = 0
+				let s1 = new Set()
+				this.storys.forEach((value,index)=>{
+					category = value.category
+					wordNum = Number(value.wordNumber)
+					if(this.settings.max < wordNum||index==0){
+						this.settings.max = wordNum
+					}
+					if(this.settings.min > wordNum||index==0){
+						this.settings.min = wordNum
+					}
+					s1.add(category)
+				})
+				this.settings.category =s1
 			}
 		}
 	}
