@@ -2,7 +2,8 @@
 <div>
 	<Row >
 		<Col span="16">
-			<Input  v-model="input" placeholder="请输入查询内容" type="text">
+			<Input  v-model="input" placeholder="请输入查询内容" type="text"
+			 @keyup.enter.native="search">
 				<span slot="prepend">
 					<Select v-model="searchBy" style="width:100px">
         				<Option v-for="item in itemSelect" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -26,7 +27,7 @@
 
 		</Col>
 	</Row>
-	<FloatPanel v-if="ifSearchSuccess" style="float: right;margin-right: 25%" :setting="settings">
+	<FloatPanel v-if="ifSearchSuccess" style="float: right;margin-right: 25%" :setting="settings" @settingChange="furtherSearch">
 		
 	</FloatPanel>
 	<ul v-for="(story,index) in showStorys">
@@ -69,6 +70,10 @@
                 	min:null,
                 	max:null,
                 	category:null
+                },
+                selectedSetting:{
+                	wordNumberRange:'',
+                	category:''
                 }
 			}
 		},
@@ -82,11 +87,12 @@
 				let _this = this
 				this.$http.post('/servlet/search',{
 					field:_this.searchBy,
-					input:_this.input
-
+					input:_this.input,
+					category:_this.selectedSetting.category,
+					wordNumberRange:_this.selectedSetting.wordNumberRange
 				}).then(
 					function(res){
-
+						console.log(res.data)
 						_this.storys = res.data
 						_this.availNum = res.data.length
 						_this.ifSearchSuccess = true
@@ -113,6 +119,12 @@
 					s1.add(category)
 				})
 				this.settings.category =s1
+			},
+			furtherSearch(changedSetting){
+				console.log(changedSetting)
+				this.selectedSetting.category = changedSetting.category
+				this.selectedSetting.wordNumberRange = changedSetting.wordNumberRange
+				this.search()
 			}
 		}
 	}

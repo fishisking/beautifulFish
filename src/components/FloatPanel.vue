@@ -1,14 +1,16 @@
 <template>
 <div>
+	<Tag closable  @on-close="cancelWordNumberRange" v-if="selectedWordNumberRange">{{selectedWordNumberRange}}</Tag>
+	<Tag closable  @on-close="cancelCategory" v-if="selectedCategory">{{selectedCategory}}</Tag>
 	<ul v-for="range in wordNumberRange">字数
-		<li><a>
+		<li><a @click="setWordNumberRange(range.range)">
 			{{range.range}}
 		</a></li>
 	</ul>
 	<br>种类
 	<ul v-for="category in categorys">
 		<li >
-			<a>{{category.title}}</a>
+			<a @click="setCategory(category.title)">{{category.title}}</a>
 		</li>
 	</ul>
 </div>
@@ -22,9 +24,34 @@
 
 			}
 		},
+		methods:{
+			setCategory(category){
+				this.selectedCategory = category
+				this.submitChange()
+			},
+			setWordNumberRange(range){
+				this.selectedWordNumberRange = range
+				this.submitChange()
+			},
+			cancelCategory(){
+				this.selectedCategory = ''
+				this.submitChange()
+			},
+			cancelWordNumberRange(){
+				this.selectedWordNumberRange = ''
+				this.submitChange()
+			},
+			submitChange(){
+				this.$emit('settingChange',{
+					category:this.selectedCategory,
+					wordNumberRange:this.selectedWordNumberRange
+				})
+			}
+		},
 		data(){
 			return {
-			
+				selectedCategory:'',
+				selectedWordNumberRange:''
 			}
 		},
 		computed:{

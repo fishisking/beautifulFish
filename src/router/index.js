@@ -6,6 +6,7 @@ import Home from '@/views/Home'
 import ActiveUsers from '@/views/ActiveUsers'
 import CreateIndex from '@/views/CreateIndex'
 import QueryTerm from '@/views/QueryTerm'
+import AllStory from '@/views/AllStory'
 Vue.use(Router)
 Vue.use(iView);
 export default new Router({
@@ -17,7 +18,7 @@ export default new Router({
   	},
     {
       path: '/home',
-      name: '',
+      name: 'home',
       component: Home,
       children:[
         {
@@ -33,6 +34,11 @@ export default new Router({
           component:CreateIndex
         }
       ]
+    },
+    {
+      path:'/story/:id',
+      component:AllStory,
+      name:'story'
     }
 
   ]
